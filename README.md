@@ -7,6 +7,7 @@ Danny’s Diner is in need of your assistance to help the restaurant stay afloat
 ### Relationship diagram
 ![image](https://user-images.githubusercontent.com/120476961/225849612-fb41d27f-1544-4f2b-8381-4e234fdbe663.png)
 ## Task questions
+[click](https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/edit/main/Solution.sql)
 1. What is the total amount each customer spent at the restaurant?
 2. How many days has each customer visited the restaurant?
 3. What was the first item from the menu purchased by each customer?
