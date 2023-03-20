@@ -7,7 +7,7 @@ Danny’s Diner is in need of your assistance to help the restaurant stay afloat
 ### Relationship diagram
 ![image](https://user-images.githubusercontent.com/120476961/225849612-fb41d27f-1544-4f2b-8381-4e234fdbe663.png)
 ### Source code
-[Click here]([https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Data.md](https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Data.md)
+[Click here](https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Data.md)
 ## Task questions
 1. What is the total amount each customer spent at the restaurant?
 2. How many days has each customer visited the restaurant?
@@ -20,7 +20,7 @@ Danny’s Diner is in need of your assistance to help the restaurant stay afloat
 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
 ## Solution
-[Click here]([https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Solution.md](https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Solution.md))
+[Click here](https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Solution.md)
 ## Method applied 
 - JOINS
 - Aggregate Functions
