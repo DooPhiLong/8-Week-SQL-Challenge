@@ -140,3 +140,12 @@ ALTER TABLE pizza_toppings
 ALTER COLUMN topping_name VARCHAR(MAX)
 ```
 ## Solution
+## Method applied
+- Data Cleaning
+- Creating Tables
+- JOINS
+- Aggregate Functions including STRING_AGG()
+- CTE's
+- CASE Statements
+- Subqueries
+- String Functions like CONCAT()
