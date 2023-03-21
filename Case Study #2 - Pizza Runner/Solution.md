@@ -234,3 +234,231 @@ CROSS APPLY string_split(c.exclusions, ',') as ex;
 ```
 ![image](https://user-images.githubusercontent.com/120476961/226630557-459687b2-cf07-45ac-b445-86b9abb26da4.png)
 
+#### 1. What are the standard ingredients for each pizza?
+```sql
+SELECT pizza_id, String_agg(topping_name,',') as Standard_toppings
+FROM #pizza_recipes
+GROUP BY pizza_id;
+```
+![image](https://user-images.githubusercontent.com/120476961/226643044-ebad47cc-a307-4faa-b732-b1872263b514.png)
+
+#### 2. What was the most commonly added extra?
+```sql
+select top(1) e.topping_id, p.topping_name, count(*) as extra_toppings_time from #extras e inner join pizza_toppings p
+on e.topping_id = p.topping_id
+group by e.topping_id, p.topping_name
+order by(count(*)) desc
+```
+![image](https://user-images.githubusercontent.com/120476961/226642965-77b24c41-11ac-48cc-ac74-978d2aa1955c.png)
+
+#### 3. What was the most commonly exclusion?
+```sql
+select top(1) e.topping_id, p.topping_name, count(*) as extra_toppings_time from #exclusions e inner join pizza_toppings p
+on e.topping_id = p.topping_id
+group by e.topping_id, p.topping_name
+order by(count(*)) desc
+``` 
+![image](https://user-images.githubusercontent.com/120476961/226642891-a91b9681-f110-4587-aa14-a9c0224b0c23.png)
+
+#### 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
+- Meat Lovers
+- Meat Lovers - Exclude Beef
+- Meat Lovers - Extra Bacon
+- Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+```sql
+with cte_exclude as(
+select  e.record_id, CONCAT(' - Exclude ', STRING_AGG(p.topping_name,', ')) as optional from #exclusions e inner join pizza_toppings p
+on e.topping_id = p.topping_id
+group by e.record_id),
+cte_extra as (
+select  e.record_id, CONCAT(' - Extras ', STRING_AGG(p.topping_name,', ')) as optional from #extras e inner join pizza_toppings p
+on e.topping_id = p.topping_id
+group by e.record_id),
+union_cte as(
+select * from cte_exclude
+union
+select * from cte_extra)
+
+select c.record_id,c.order_id, CONCAT(p.pizza_name,STRING_AGG(optional,', ')) as list
+from #customer_orders c
+inner join pizza_names p 
+on c.pizza_id = p.pizza_id 
+left join union_cte u
+on c.record_id = u.record_id 
+group by c.record_id, c.order_id, p.pizza_name
+```
+![image](https://user-images.githubusercontent.com/120476961/226642786-596b5482-3f12-4c2a-8083-2b2bbfc6a80a.png)
+
+#### 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients . For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+```sql
+with cte as(
+select cu.record_id,p1.pizza_name,
+case when
+    p.topping_id in( SELECT topping_id FROM #extras e WHERE cu.record_id = e.record_id ) then 'X2'+ p.topping_name
+    ELSE p.topping_name
+    END AS topping
+from #customer_orders cu inner join #pizza_recipes p
+on cu.pizza_id = p.pizza_id
+inner join pizza_names p1
+on cu.pizza_id = p1.pizza_id
+
+)
+select cu.record_id, CONCAT(c.pizza_name +':' ,STRING_AGG(topping, ',' )) as list from #customer_orders cu inner join cte c
+on cu.record_id = c.record_id
+group by cu. record_id,c.pizza_name
+order by cu.record_id
+```
+![image](https://user-images.githubusercontent.com/120476961/226642597-0dfcc7c4-b333-44b6-8937-b41b2e390974.png)
+
+#### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+```sql
+WITH INGREDIENT_CTE AS (
+SELECT record_id,
+pizza_name, 
+topping_name,
+ CASE WHEN p1.topping_id in (
+                             SELECT topping_id
+                             FROM #extras e
+                             WHERE C.record_id = e.record_id
+                             ) THEN 2
+ELSE 1
+END AS times_used_topping
+FROM #customer_orders c 
+JOIN pizza_names p2 ON c.pizza_id = p2.pizza_id
+JOIN #pizza_recipes p1 ON c.pizza_id = p1.pizza_id
+JOIN #runner_orders r ON c.order_id = r.order_id
+WHERE p1.topping_id NOT IN (SELECT topping_id 
+FROM #exclusions e 
+ WHERE e.record_id = c.record_id) 
+ and r.cancellation is NULL
+)
+
+SELECT topping_name, 
+SUM(times_used_topping) AS times_used_topping
+from INGREDIENT_CTE
+GROUP BY topping_name
+order by times_used_topping desc;
+```
+![image](https://user-images.githubusercontent.com/120476961/226641611-017646f3-8396-4313-9940-dd9334dfe223.png)
+
+### D. Pricing and Ratings
+#### 1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
+```sql
+with cte as (
+select 
+pizza_id, 
+pizza_name,
+case when
+pizza_name = 'Meatlovers' THEN 12
+ELSE 10 END AS pizza_cost
+from pizza_names 
+)
+select sum(c.pizza_cost) as total
+from #customer_orders cu 
+join #runner_orders r
+on cu.order_id = r.order_id
+join cte c
+on cu.pizza_id = c.pizza_id
+where r.cancellation is null
+``` 
+![image](https://user-images.githubusercontent.com/120476961/226645521-44ff5935-3731-436a-9579-76604b006b5b.png)
+
+#### 2. What if there was an additional $1 charge for any pizza extras? Add cheese is $1 extra
+```sql
+with cte1 as (
+select pizza_id, pizza_name,
+case when
+pizza_name = 'Meatlovers' THEN 12
+ELSE 10 END AS cost
+from pizza_names 
+) ,
+cte2 as(
+select 
+case when cu.extras is null then c.cost
+else c.cost + len(replace(cu.extras,', ','' ))
+end as pizza_cost
+from #customer_orders cu join cte1 c
+on cu.pizza_id = c.pizza_id
+join #runner_orders r 
+on cu.order_id = r.order_id
+where r.cancellation is null
+)
+select sum(pizza_cost) as total from cte2
+```
+![image](https://user-images.githubusercontent.com/120476961/226645645-3db6bc1c-84e0-416d-8fce-ba802938bcee.png)
+
+#### 3. The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
+```sql
+CREATE TABLE ratings 
+ (order_id INTEGER,
+    rating INTEGER);
+INSERT INTO ratings
+ (order_id ,rating)
+VALUES 
+(1,3),
+(2,4),
+(3,5),
+(4,2),
+(5,1),
+(6,3),
+(7,4),
+(8,1),
+(9,3),
+(10,5); 
+SELECT * from ratings
+```
+![image](https://user-images.githubusercontent.com/120476961/226645889-bda47613-16a2-477e-a3ab-72bf00689f8f.png)
+
+#### 4. Using your newly generated table - can you join all of the information together to form a table 
+- which has the following information for successful deliveries?
+- customer_id
+- order_id
+- runner_id
+- rating
+- order_time
+- pickup_time
+- Time between order and pickup
+- Delivery duration
+- Average speed
+- Total number of pizzas
+```sql
+SELECT customer_id , 
+        c.order_id, 
+        runner_id, 
+        rating, 
+        order_time, 
+        pickup_time, 
+        datepart( minute,pickup_time - order_time) as Time__order_pickup, 
+        r.duration, 
+        round(avg(distance/duration*60),2) as avg_Speed, 
+        COUNT(pizza_id) AS Pizza_Count
+FROM #customer_orders c
+LEFT JOIN #runner_orders r ON c.order_id = r.order_id 
+LEFT JOIN ratings r2 ON c.order_id = r2.order_id
+WHERE r.cancellation is NULL
+GROUP BY customer_id , c.order_id, runner_id, rating, order_time, pickup_time, datepart( minute,pickup_time - order_time) , r.duration
+ORDER BY c.customer_id;
+``` 
+![image](https://user-images.githubusercontent.com/120476961/226646626-9a9c0ff8-a7eb-4183-a5c2-367a771af04d.png)
+
+#### 5. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+```sql
+with cte as(
+select 
+cu.order_id,
+sum(case when pizza_name = 'Meatlovers' THEN 12
+else 10 end )as pizza_price
+from pizza_names n
+join #customer_orders cu on cu.pizza_id = n.pizza_id
+group by cu.order_id
+)
+select  
+sum(cte.pizza_price) as revenue,
+sum( r.distance*0.3) as total_cost,
+sum(cte.pizza_price) - sum( r.distance*0.3) as profit
+from  #runner_orders r 
+join cte on r.order_id = cte.order_id
+where r.cancellation is null
+```
+![image](https://user-images.githubusercontent.com/120476961/226647063-a0980557-6be1-495b-a7f0-071bbeb18d2c.png)
+
