@@ -81,6 +81,8 @@ SELECT DATENAME(WEEKDAY,[order_time]) as Day, count(*) as AMount  FROM #customer
 group by DATENAME(WEEKDAY,[order_time])
 ```
 ![image](https://user-images.githubusercontent.com/120476961/226347308-c2ecdbe5-30a4-4fe0-91b9-14a530b6cc5f.png)
+
+
 ### B. Runner and Customer Experience
 #### 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
 ```sql
@@ -175,3 +177,60 @@ select runner_id, sum(caculate) * 100/COUNT(runner_id) as pre_succes from cte
 group by runner_id
 ```
 ![image](https://user-images.githubusercontent.com/120476961/226357200-81040b65-4382-4cf7-b70d-61b8f2dd883d.png)
+
+
+### C. Ingredient Optimisation
+#### Data cleaning for this part
+1. Cleaning pizza_recipes table by creating a clean temp table
+- Splitting comma delimited lists into rows
+###### Original table:
+![image](https://user-images.githubusercontent.com/120476961/226626834-003e76e7-24ab-4190-8e49-5a7e5bb7067a.png)
+```sql
+SELECT pizza_id, 
+        RTRIM(topping_id.value) as topping_id,
+       topping_name
+INTO #pizza_recipes  
+FROM pizza_recipes p
+CROSS APPLY string_split(p.toppings, ',') as topping_id
+INNER JOIN pizza_toppings p2 ON TRIM(topping_id.value) = p2.topping_id
+```
+###### New table :
+![image](https://user-images.githubusercontent.com/120476961/226627215-2b1a085c-4659-45b8-9d6b-d160e3f1e412.png)
+
+2. Cleaning #customer_orders table for question 4 5
+- Adding an Identity Column (to be able to uniquely identify every single pizza ordered)
+###### Original table:
+![image](https://user-images.githubusercontent.com/120476961/226628793-1d989d68-b296-4f8d-99e2-0ceb48a075dd.png)
+```sql
+ALTER TABLE #customer_orders
+ADD record_id INT IDENTITY(1,1)
+```
+###### New table :
+![image](https://user-images.githubusercontent.com/120476961/226628885-42083908-b305-457e-b80e-6517c73430d3.png)
+
+
+3. Add New Tables: Exclusions & Extras from #customer_orders table
+- Splitting the exclusions & extras comma delimited lists from #customer_orders into rows and storing in new tables
+###### #customer_orders table
+![image](https://user-images.githubusercontent.com/120476961/226628885-42083908-b305-457e-b80e-6517c73430d3.png)
+###### New extras table
+```sql
+SELECT		
+      c.record_id,
+      TRIM(ext.value) AS topping_id
+INTO #extras
+FROM #customer_orders as c
+CROSS APPLY string_split(c.extras, ',') as ext;
+```
+![image](https://user-images.githubusercontent.com/120476961/226630198-311db8fa-e7e3-46ee-ab6e-04b09a3302f1.png)
+
+###### New exclusions table
+```sql
+SELECT	c.record_id,
+	      TRIM(ex.value) AS topping_id
+INTO #exclusions
+FROM #customer_orders as c
+CROSS APPLY string_split(c.exclusions, ',') as ex;
+```
+![image](https://user-images.githubusercontent.com/120476961/226630557-459687b2-cf07-45ac-b445-86b9abb26da4.png)
+
