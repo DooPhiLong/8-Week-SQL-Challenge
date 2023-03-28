@@ -10,7 +10,7 @@ Danny created Foodie-Fi with a data driven mindset and wanted to ensure all futu
 ### Relationship diagram
 ![image](https://user-images.githubusercontent.com/120476961/228118522-b35e8a34-d204-45bc-89fa-672779f84898.png)
 ### Insert data
-[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Data.md)
+[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%233%20-%20Foodie-Fi/Data.md)
 ## Task questions
 ### A. Customer Journey
 Based off the 8 sample customers provided in the sample from the subscriptions table, write a brief description about each customer’s onboarding journey.
@@ -31,7 +31,7 @@ Try to keep it as short as possible - you may also want to run some sort of join
 11. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?
 
 ## Solution
-[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Solution.md)
+[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%233%20-%20Foodie-Fi/Solution.md)
 ## Method applied
 - Creating Tables
 - JOINS
