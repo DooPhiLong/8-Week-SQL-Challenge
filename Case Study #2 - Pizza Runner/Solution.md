@@ -70,12 +70,14 @@ WHERE r.cancellation is NULL and c.exclusions is not NULL and c.extras is not nu
 ```
 ![image](https://user-images.githubusercontent.com/120476961/226347535-f6d3711e-82e9-4834-b4b0-cbc485322e3a.png)
 #### 9. What was the total volume of pizzas ordered for each hour of the day?
+- DATEPART : Returns a time value of the passed argument, which can be a day, month, year, quarter, hour, minute, second, millisecond... The return value is an integer (int).
 ```sql
 SELECT DATEPART(HOUR, [order_time]) as Hour, count(*) as AMount  FROM #customer_orders
 group by DATEPART(HOUR, [order_time])
 ```
 ![image](https://user-images.githubusercontent.com/120476961/226347241-8a89fca2-c4be-420c-a389-16d776807c1c.png)
 #### 10. What was the volume of orders for each day of the week?
+- DATENAME : Returns a time value of the passed argument, which can be a day, month, year, quarter, hour, minute, second, millisecond... The return value is of type string (ASCII).
 ```sql
 SELECT DATENAME(WEEKDAY,[order_time]) as Day, count(*) as AMount  FROM #customer_orders
 group by DATENAME(WEEKDAY,[order_time])
@@ -85,6 +87,7 @@ group by DATENAME(WEEKDAY,[order_time])
 
 ### B. Runner and Customer Experience
 #### 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
+- DATEPART : Returns a time value of the passed argument, which can be a day, month, year, quarter, hour, minute, second, millisecond... The return value is an integer (int).
 ```sql
 SET DATEFIRST 1; 
 SELECT DATEPART(WEEK,[registration_date])as week, 
@@ -95,6 +98,8 @@ GROUP BY DATEPART(WEEK,[registration_date]);
 ![image](https://user-images.githubusercontent.com/120476961/226356027-4ca9d7f6-ac86-491f-b54c-5e3cf26e28be.png)
 
 #### 2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
+- DATEDIFF : Returns the difference between two time values based on the specified time period. The two time values must be dates or date and time expressions.
+-  Cast : Change the data type
 ```sql
 WITH time_table AS (
 SELECT  distinct runner_id, 
@@ -115,6 +120,8 @@ GROUP BY runner_id;
 ![image](https://user-images.githubusercontent.com/120476961/226356551-53eba27a-aec2-4b8f-a9e1-58858f79e1bb.png)
 
 #### 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
+- DATEDIFF : Returns the difference between two time values based on the specified time period. The two time values must be dates or date and time expressions.
+-  Cast : Change the data type
 ```sql
 WITH CTE AS (SELECT  c.order_id,
                       COUNT(c.order_id) as pizza_order,
@@ -136,6 +143,7 @@ GROUP BY pizza_order
 - Here we can see that as the number of pizzas in an order goes up, so does the total prep time for that order, as you would expect.
 - But then we can also notice that the average preparation time per pizza is higher when you order 1 than when you order multiple.
 #### 4. What was the average distance travelled for each customer?
+- Round : Used to round a number to a specified decimal place.
 ```sql
 select c.customer_id, round(AVG(r.distance),2) avg_dis from #customer_orders c 
 INNER JOIN #runner_orders r 
@@ -155,6 +163,7 @@ WHERE cancellation is NULL
 ![image](https://user-images.githubusercontent.com/120476961/226356902-c972aede-e9ac-4b15-a866-3098ffae0b91.png)
 
 #### 6. What was the average speed for each runner for each delivery ?
+- - Round : Used to round a number to a specified decimal place.
 ```sql
 select runner_id, order_id, round(AVG(distance*60/duration),2) as avg_speed from #runner_orders
 where cancellation is null
@@ -183,6 +192,8 @@ group by runner_id
 #### Data cleaning for this part
 1. Cleaning pizza_recipes table by creating a clean temp table
 - Splitting comma delimited lists into rows
+- RTRIM : Used to remove all whitespace characters from the trailing position (right positions) of the string.
+- String_split : A table-valued function that splits a string into rows of substrings, based on a specified separator character.
 ###### Original table:
 ![image](https://user-images.githubusercontent.com/120476961/226626834-003e76e7-24ab-4190-8e49-5a7e5bb7067a.png)
 ```sql
@@ -211,6 +222,8 @@ ADD record_id INT IDENTITY(1,1)
 
 3. Add New Tables: Exclusions & Extras from #customer_orders table
 - Splitting the exclusions & extras comma delimited lists from #customer_orders into rows and storing in new tables
+- RTRIM : Used to remove all whitespace characters from the trailing position (right positions) of the string.
+- String_split : A table-valued function that splits a string into rows of substrings, based on a specified separator character.
 ###### #customer_orders table
 ![image](https://user-images.githubusercontent.com/120476961/226628885-42083908-b305-457e-b80e-6517c73430d3.png)
 ###### New extras table
@@ -235,6 +248,7 @@ CROSS APPLY string_split(c.exclusions, ',') as ex;
 ![image](https://user-images.githubusercontent.com/120476961/226630557-459687b2-cf07-45ac-b445-86b9abb26da4.png)
 
 #### 1. What are the standard ingredients for each pizza?
+- String_agg : Concatenates the values of string expressions and places separator values between them. The separator isn't added at the end of string.
 ```sql
 SELECT pizza_id, String_agg(topping_name,',') as Standard_toppings
 FROM #pizza_recipes
