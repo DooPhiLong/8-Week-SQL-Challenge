@@ -17,6 +17,7 @@ group by s.customer_id
 ![image](https://user-images.githubusercontent.com/120476961/225851850-f48ca2e2-b41e-4efb-9ef5-2db7f11210cd.png)
 
 ### 3/ What was the first item from the menu purchased by each customer?
+- RANK() : Returns the rank of each row within the partition of a result set. The rank of a row is one plus the number of ranks that come before the row in question.
 ```sql
 WITH PURCHASED_RANK AS (
 SELECT customer_id, 
@@ -44,6 +45,7 @@ order by count(*) desc
 ![image](https://user-images.githubusercontent.com/120476961/225852726-e282aec4-d81d-4832-a344-b1c9b94124ba.png)
 
 ### 5/ Which item was the most popular for each customer?
+-  RANK() : Returns the rank of each row within the partition of a result set. The rank of a row is one plus the number of ranks that come before the row in 
 ```sql
 WITH number_of_purchase AS (
 select s.customer_id, s.product_id, count(*) as number_of from sales as s
@@ -66,6 +68,7 @@ WHERE rank = 1
 ![image](https://user-images.githubusercontent.com/120476961/225853007-d968f021-dc6f-4d51-8890-7293fba929bd.png)
 
 ### 6/ Which item was purchased first by the customer after they became a member?
+- RANK() : Returns the rank of each row within the partition of a result set. The rank of a row is one plus the number of ranks that come before the row in 
 ```sql
 with rank_purchase_item as (
 select s.customer_id,
@@ -86,6 +89,7 @@ where rank_purchase_item.rank = 1
 ![image](https://user-images.githubusercontent.com/120476961/225853150-0894d198-6d79-4a30-973d-9b23832c0cb9.png)
 
 ### 7/ Which item was purchased just before the customer became a member?
+-  RANK() : Returns the rank of each row within the partition of a result set. The rank of a row is one plus the number of ranks that come before the row in 
 ```sql
 with rank_purchase_item as
 (
@@ -133,6 +137,7 @@ group by s.customer_id
 ![image](https://user-images.githubusercontent.com/120476961/225853933-3bb3a7a1-18ad-458c-8c54-6000dfbb0948.png)
 
 ### 10/ In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
+- DATEADD : This function adds a number (a signed integer) to a datepart of an input date, and returns a modified date/time value. For example, you can use this function to find the date that is 7000 minutes from today: number = 7000, datepart = minute, date = today.
 ```sql
 select 
 s.customer_id, 
