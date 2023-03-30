@@ -2,6 +2,7 @@
 
 ### A. Customer Journey
 #### 1. Based off the 8 sample customers provided in the sample from the subscriptions table, write a brief description about each customer’s onboarding journey.Try to keep it as short as possible - you may also want to run some sort of join to make your explanations a bit easier!
+- LEAD : Provides access to a row at a given physical offset that follows the current row. Use this analytic function in a SELECT statement to compare values in the current row with values in a following row.
 ```sql
 CREATE TABLE subscriptions_demo (
   customer_id INTEGER,
@@ -62,6 +63,7 @@ select count(distinct(customer_id)) as Number_of_customer from subscriptions
 ![image](https://user-images.githubusercontent.com/120476961/228122346-8ab2d9ae-3a3f-4053-89f0-9cb1ac303aa9.png)
 
 #### 2. What is the monthly distribution of trial plan start_date values for our dataset - use the start of the month as the group by value. 
+- DATEPART : Returns a time value of the passed argument, which can be a day, month, year, quarter, hour, minute, second, millisecond... The return value is an integer (int).
 ```sql
 SELECT DATEPART(month, s.start_date) as month , COUNT(s.customer_id) as number_of_trial
 FROM subscriptions s LEFT JOIN plans p 
@@ -73,6 +75,7 @@ order by DATEPART(month, start_date)
 ![image](https://user-images.githubusercontent.com/120476961/228122494-48bdf7fe-aeac-4862-bfc7-bcd26154284e.png)
 
 #### 3. What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name.
+- DATEPART : Returns a time value of the passed argument, which can be a day, month, year, quarter, hour, minute, second, millisecond... The return value is an integer (int).
 ```sql
 SELECT  p.plan_name, COUNT(s.customer_id) as number_of_trial
 FROM subscriptions s LEFT JOIN plans p 
@@ -83,6 +86,7 @@ GROUP BY p.plan_name
 ![image](https://user-images.githubusercontent.com/120476961/228122618-dc97f510-4b42-446d-b241-0b1182523ba1.png)
 
 #### 4. What is the customer count and percentage of customers who have churned rounded to 1 decimal place?
+- Cast : Change the data type
 ```sql
 with 
 num_of_cus as (
@@ -102,6 +106,7 @@ from num_of_cus, num_of_churned_cus
 ![image](https://user-images.githubusercontent.com/120476961/228122708-7ba6117c-2a77-4cc4-86b0-8559ee4f714c.png)
 
 #### 5. How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole numbe
+- LEAD : Provides access to a row at a given physical offset that follows the current row. Use this analytic function in a SELECT statement to compare values in the current row with values in a following row.
 ```sql
 WITH CTE AS(
 SELECT *, 
@@ -120,6 +125,8 @@ GROUP BY plan_name;
 ![image](https://user-images.githubusercontent.com/120476961/228123005-ec56ee33-5e2a-490b-a8dc-5b1810fe0f41.png)
 
 #### 6. What is the number and percentage of customer plans after their initial free trial?
+- LEAD : Provides access to a row at a given physical offset that follows the current row. Use this analytic function in a SELECT statement to compare values in the current row with values in a following row.
+- Cast : Change the data type
 ```sql
 WITH CTE AS(
 SELECT *, 
@@ -137,6 +144,7 @@ GROUP BY plan_name,next_plan;
 ![image](https://user-images.githubusercontent.com/120476961/228123248-96fbee63-9d8a-4f5c-a2aa-ccd6378c28c9.png)
 
 #### 7. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?
+- LEAD : Provides access to a row at a given physical offset that follows the current row. Use this analytic function in a SELECT statement to compare values in the current row with values in a following row.
 ```sql
 with cte as (
 select * ,
@@ -165,6 +173,7 @@ GROUP BY plan_name
 ```
 ![image](https://user-images.githubusercontent.com/120476961/228123473-e2bb79ed-5caa-4cbd-bd92-161a566948b4.png)
 #### 9. How many days on average does it take for a customer to upgrade to an annual plan from the day they join Foodie-Fi?
+- DATEDIFF : Returns the difference between two time values based on the specified time period. The two time values must be dates or date and time expressions.
 ```sql
 WITH START_CTE AS (
 SELECT customer_id, start_date 
@@ -187,6 +196,7 @@ LEFT JOIN START_CTE C1 ON C2.customer_id =C1.customer_id;
 ```
 ![image](https://user-images.githubusercontent.com/120476961/228123649-34701bb6-2dab-4ae5-8e52-bc92a60e9412.png)
 #### 10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)
+- DATEDIFF : Returns the difference between two time values based on the specified time period. The two time values must be dates or date and time expressions.
 ```sql
 WITH START_CTE AS (   
 SELECT customer_id,start_date 
@@ -223,6 +233,7 @@ GROUP BY group_day;
 ```
 ![image](https://user-images.githubusercontent.com/120476961/228123761-180d4cc0-6609-48bc-b5be-b91e242378a2.png)
 #### 11. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?
+- LEAD : Provides access to a row at a given physical offset that follows the current row. Use this analytic function in a SELECT statement to compare values in the current row with values in a following row.
 ```sql
 WITH CTE AS(
 SELECT *, 
