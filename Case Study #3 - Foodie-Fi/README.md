@@ -9,8 +9,8 @@ Danny created Foodie-Fi with a data driven mindset and wanted to ensure all futu
 ## Data
 ### Relationship diagram
 ![image](https://user-images.githubusercontent.com/120476961/228118522-b35e8a34-d204-45bc-89fa-672779f84898.png)
-### Insert data
-[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%233%20-%20Foodie-Fi/Data.md)
+### Source data
+[Click here](https://8weeksqlchallenge.com/case-study-3/)
 ## Task questions
 ### A. Customer Journey
 Based off the 8 sample customers provided in the sample from the subscriptions table, write a brief description about each customer’s onboarding journey.
