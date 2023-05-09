@@ -6,8 +6,8 @@ Danny’s Diner is in need of your assistance to help the restaurant stay afloat
 ## Data
 ### Relationship diagram
 ![image](https://user-images.githubusercontent.com/120476961/225849612-fb41d27f-1544-4f2b-8381-4e234fdbe663.png)
-### Insert data
-[Click here](https://github.com/DooPhiLong/8_Week_SQL_Challenge---1/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Data.md)
+### Source data
+[Click here](https://8weeksqlchallenge.com/case-study-1/)
 ## Task questions
 1. What is the total amount each customer spent at the restaurant?
 2. How many days has each customer visited the restaurant?
