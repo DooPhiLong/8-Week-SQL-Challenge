@@ -54,7 +54,7 @@ This table stores all customer deposits, withdrawals and purchases made using th
 5. What is the percentage of customers who increase their closing balance by more than 5%?
  
 ## Solution
-
+[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%234%20-%20Data%20Bank/Solution.md)
 ## Method applied
 - Creating Tables
 - JOINS
