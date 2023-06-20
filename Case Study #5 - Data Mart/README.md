@@ -1,5 +1,7 @@
 # Case Study #5: Data Mart
-![image](https://github.com/DooPhiLong/8-Week-SQL-Challenge/assets/120476961/2b721a3e-22a1-4fa5-abe7-33dc4cc6e660)
+![image](https://github.com/DooPhiLong/8-Week-SQL-Challenge/assets/120476961/be09e557-6ee4-447f-abfb-43d53b3c8415)
+
+
 
 ## Introduction
 Data Mart is an online supermarket that specialises in fresh produce.
