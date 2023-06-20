@@ -86,7 +86,7 @@ Using this analysis approach - answer the following questions:
 
 ***
 ## Solution
-
+[Click here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%235%20-%20Data%20Mart/Solution.md)
 ## Method apllied
 - Creating Tables
 - JOINS
