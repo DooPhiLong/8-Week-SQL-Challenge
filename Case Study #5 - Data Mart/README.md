@@ -33,7 +33,8 @@ Each record in the dataset is related to a specific aggregated slice of the unde
 
 10 random rows are shown in the table output below from data_mart.weekly_sales.
 
-image
+![image](https://github.com/DooPhiLong/8-Week-SQL-Challenge/assets/120476961/880271c7-c064-404a-9942-8c16cffd2954)
+
 
 ### Source data
 [Click here](https://8weeksqlchallenge.com/case-study-5/)
