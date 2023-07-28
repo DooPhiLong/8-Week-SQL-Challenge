@@ -11,10 +11,7 @@ In this case study - you are required to support the founder and CEO Danny’s v
 
 ### Relationship diagram
 
-[Diagram link](https://dbdiagram.io/d/634f90314709410195915552)
-
 ![Untitled (1)](https://user-images.githubusercontent.com/101379141/196609058-acb8a711-16aa-493d-912f-0b94872337e1.png)
-
 
 **users table**
 
