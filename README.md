@@ -10,3 +10,4 @@ Each case study contains a dataset with a series of questions.
 - [Case Study #3 - Foodie-Fi](https://github.com/DooPhiLong/8-Week-SQL-Challenge/tree/main/Case%20Study%20%233%20-%20Foodie-Fi)
 - [Case Study #4 - Data Bank](https://github.com/DooPhiLong/8-Week-SQL-Challenge/tree/main/Case%20Study%20%234%20-%20Data%20Bank)
 - [Case Study #5 - Data Mart](https://github.com/DooPhiLong/8-Week-SQL-Challenge/tree/main/Case%20Study%20%235%20-%20Data%20Mart)
+- [Case Study #6 - Clique Bait](https://github.com/DooPhiLong/8-Week-SQL-Challenge/tree/main/Case%20Study%20%236%20-%20Clique%20Bait)
