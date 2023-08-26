@@ -105,7 +105,7 @@ Average composition can be calculated by dividing the `composition` column by th
 
 ***
 ## Solution
-[CLick here](https://8weeksqlchallenge.com/case-study-8/)
+[CLick here](https://github.com/DooPhiLong/8-Week-SQL-Challenge/blob/main/Case%20Study%20%238%20-%20Fresh%20Segments/Solution.md)
 
 ## Method apllied
 - Creating Tables
